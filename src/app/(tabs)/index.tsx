@@ -33,7 +33,7 @@ export default function HomeScreen() {
           <View style={styles.topRow}>
             <View>
               <Text style={styles.greeting}>Good morning ☀️</Text>
-              <Text style={styles.name}>Arjun Sharma</Text>
+              <Text style={styles.name}>Prince V</Text>
               <View style={styles.locationContainer}>
                 <Ionicons name="location" size={14} color="#007AFF" />
                 <Text style={styles.locationText}>Bandra West, Mumbai</Text>
@@ -41,10 +41,9 @@ export default function HomeScreen() {
             </View>
             <View style={styles.headerActions}>
 
-              <Image
-                source={{ uri: 'https://i.pravatar.cc/150?img=11' }}
-                style={styles.avatar}
-              />
+              <View style={[styles.avatar, { backgroundColor: '#3B82F6', justifyContent: 'center', alignItems: 'center' }]}>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#fff' }}>P</Text>
+              </View>
             </View>
           </View>
 
