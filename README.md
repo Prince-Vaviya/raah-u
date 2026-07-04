@@ -78,18 +78,34 @@ Follow these instructions to replicate and run this project on your local device
    npm install
    ```
 
-3. **Start the Development Server**
+### Running the App
+
+There are two main ways to run this project: using Expo Go (easiest) or compiling a Native Development Build (for simulators/custom native code).
+
+#### Option 1: Expo Go (Fastest, works on physical devices)
+1. Start the Metro Bundler:
    ```bash
-   npm run start
+   npm start
    ```
-
-### Running on your Device
-
-Once the Metro Bundler starts, it will display a large QR code in your terminal.
-- **iOS**: Open your default Camera app and scan the QR code. Tap the prompt to open it in **Expo Go**.
-- **Android**: Open the **Expo Go** app and tap "Scan QR Code".
+2. Once it starts, ensure you are in "Expo Go" mode (Press `s` in the terminal if it says you are using a development build).
+3. A large QR code will display in your terminal:
+   - **iOS**: Open your default Camera app and scan the QR code. Tap the prompt to open it in **Expo Go**.
+   - **Android**: Open the **Expo Go** app and tap "Scan QR Code".
 
 *Note: Ensure your phone and your computer are connected to the same Wi-Fi network.*
+
+#### Option 2: Native Simulators (Compiles native code locally)
+If you want to run the app on a Mac Simulator (or Windows Android Emulator), you need to compile the native code locally.
+
+- **For iOS Simulator (Mac only):**
+  ```bash
+  npm run ios
+  ```
+- **For Android Emulator:**
+  ```bash
+  npm run android
+  ```
+*(This will compile the native code from scratch, install it on the simulator, and launch it automatically.)*
 
 ---
 
