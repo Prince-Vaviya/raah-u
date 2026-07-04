@@ -2,10 +2,12 @@ import { Tabs } from 'expo-router';
 import { useColorScheme } from 'react-native';
 import { SymbolView } from 'expo-symbols';
 import { Colors } from '@/constants/theme';
+import { useAlerts } from '@/context/AlertsContext';
 
 export default function TabLayout() {
   const scheme = useColorScheme();
   const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
+  const { unreadCount } = useAlerts();
 
   return (
     <Tabs
@@ -40,6 +42,7 @@ export default function TabLayout() {
         name="alerts"
         options={{
           title: 'Alerts',
+          tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
           tabBarIcon: ({ color }) => (
             <SymbolView name="bell" tintColor={color} size={24} />
           ),
