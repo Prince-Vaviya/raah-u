@@ -1,13 +1,24 @@
+import React, { useState } from 'react';
 import { ActionChip } from '@/components/ui/ActionChip';
 import { BusCard } from '@/components/ui/BusCard';
 import { StopCard } from '@/components/ui/StopCard';
 import { Ionicons } from '@expo/vector-icons';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
+
+  const handleSearch = () => {
+    if (searchQuery.trim().length > 0) {
+      router.push({ pathname: '/search', params: { query: searchQuery } });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
@@ -48,6 +59,10 @@ export default function HomeScreen() {
                 style={styles.searchInput}
                 placeholder="Where to?"
                 placeholderTextColor="#999"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                onSubmitEditing={handleSearch}
+                returnKeyType="search"
               />
               <Ionicons name="mic" size={20} color="#007AFF" />
             </View>

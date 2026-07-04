@@ -5,13 +5,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function JourneyStartedScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, destination, from } = useLocalSearchParams<{ id: string, destination?: string, from?: string }>();
   const router = useRouter();
 
   const handleGoHome = () => {
     // Navigate directly back to the main home tab
     router.replace('/(tabs)');
   };
+
+  const displayDestination = destination || 'Andheri Station';
+  const displayFrom = from || 'Bandra Station (W)';
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,7 +39,7 @@ export default function JourneyStartedScreen() {
         <View style={styles.textContainer}>
           <Text style={styles.title}>Journey Started!</Text>
           <Text style={styles.subtitle}>
-            You're on Bus {id} heading to Andheri Station.
+            You're on Bus {id} heading to {displayDestination}.
           </Text>
         </View>
 
@@ -51,13 +54,13 @@ export default function JourneyStartedScreen() {
 
           <View style={styles.cardRow}>
             <Text style={styles.cardLabel}>From</Text>
-            <Text style={styles.cardValue}>Bandra Station (W)</Text>
+            <Text style={styles.cardValue}>{displayFrom}</Text>
           </View>
           <View style={styles.divider} />
 
           <View style={styles.cardRow}>
             <Text style={styles.cardLabel}>To</Text>
-            <Text style={styles.cardValue}>Andheri Station</Text>
+            <Text style={styles.cardValue}>{displayDestination}</Text>
           </View>
           <View style={styles.divider} />
 

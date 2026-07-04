@@ -16,7 +16,7 @@ const routeCoordinates = [
   { latitude: 37.804, longitude: -122.271 }, // Oakland
 ];
 
-const timelineData = [
+const defaultTimelineData = [
   { id: 1, name: 'Bandra Station (W)', time: '9:08 AM', status: 'passed' },
   { id: 2, name: 'Turner Road', time: '9:12 AM', status: 'passed' },
   { id: 3, name: 'Linking Road Junction', time: '9:15 AM', status: 'passed' },
@@ -26,10 +26,22 @@ const timelineData = [
   { id: 7, name: 'BKC Office', time: '9:40 AM', status: 'destination' },
 ];
 
+const nerulTimelineData = [
+  { id: 1, name: 'Sanpada', time: '10:00 AM', status: 'passed' },
+  { id: 2, name: 'Juinagar', time: '10:15 AM', status: 'current' },
+  { id: 3, name: 'Nerul', time: '10:30 AM', status: 'destination' },
+];
+
 export default function BusDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, destination, fare, from } = useLocalSearchParams<{ id: string, destination?: string, fare?: string, from?: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+
+  const isNerulRoute = destination?.toLowerCase().includes('nerul');
+  const activeTimeline = isNerulRoute ? nerulTimelineData : defaultTimelineData;
+  const displayDestination = destination || 'Andheri Station';
+  const displayFare = fare || '₹18';
+  const displayTime = isNerulRoute ? '15 min' : '32 min';
 
   return (
     <View style={styles.container}>
@@ -78,11 +90,11 @@ export default function BusDetailScreen() {
               <View style={styles.busNumberBadge}>
                 <Text style={styles.busNumberText}>{id}</Text>
               </View>
-              <Text style={styles.destinationTitle}>Andheri Station</Text>
+              <Text style={styles.destinationTitle}>{displayDestination}</Text>
             </View>
             <View style={styles.infoRight}>
-              <Text style={styles.priceText}>₹18</Text>
-              <Text style={styles.timeText}>32 min</Text>
+              <Text style={styles.priceText}>{displayFare}</Text>
+              <Text style={styles.timeText}>{displayTime}</Text>
             </View>
           </View>
           <Text style={styles.statusText}>On time • 3 min away</Text>
@@ -91,8 +103,9 @@ export default function BusDetailScreen() {
           <View style={styles.featuresRow}>
             <View style={styles.featureCard}>
               <Ionicons name="location" size={20} color="#64748B" />
-              <Text style={styles.featureText}>7 stops</Text>
+              <Text style={styles.featureText}>{activeTimeline.length} stops</Text>
             </View>
+
             <View style={styles.featureCard}>
               <Ionicons name="accessibility" size={20} color="#007AFF" />
               <Text style={styles.featureText}>Accessible</Text>
@@ -106,7 +119,7 @@ export default function BusDetailScreen() {
           {/* Timeline */}
           <Text style={styles.timelineTitle}>Route Timeline</Text>
           <View style={styles.timelineContainer}>
-            {timelineData.map((stop, index) => (
+            {activeTimeline.map((stop, index) => (
               <View key={stop.id} style={styles.timelineItem}>
                 <View style={styles.timelineLeft}>
                   <View style={[
@@ -116,7 +129,7 @@ export default function BusDetailScreen() {
                     stop.status === 'upcoming' && styles.nodeUpcoming,
                     stop.status === 'destination' && styles.nodeDestination,
                   ]} />
-                  {index < timelineData.length - 1 && (
+                  {index < activeTimeline.length - 1 && (
                     <View style={[
                       styles.timelineLine,
                       stop.status === 'passed' ? styles.linePassed : styles.lineUpcoming
@@ -147,7 +160,7 @@ export default function BusDetailScreen() {
 
         {/* Board Button */}
         <View style={[styles.bottomAction, { paddingBottom: insets.bottom || 20 }]}>
-          <Link href={`/bus/journey/${id}`} asChild>
+          <Link href={`/bus/journey/${id}?destination=${displayDestination}&from=${from || 'Bandra Station (W)'}`} asChild>
             <Pressable style={styles.boardButton}>
               <Text style={styles.boardButtonText}>Board Bus {id}</Text>
             </Pressable>
