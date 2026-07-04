@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Text, Pressable, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Pressable, Dimensions, ScrollView, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter, Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import MapView, { Marker, Polyline } from 'react-native-maps';
+import { useJourney } from '@/context/JourneyContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -42,6 +43,25 @@ export default function BusDetailScreen() {
   const displayDestination = destination || 'Andheri Station';
   const displayFare = fare || '₹18';
   const displayTime = isNerulRoute ? '15 min' : '32 min';
+  const displayFrom = from || 'Bandra Station (W)';
+
+  const { activeJourney, boardBus } = useJourney();
+
+  const handleBoardBus = () => {
+    if (activeJourney) {
+      Alert.alert(
+        'Journey in Progress',
+        'First mark your current journey as completed on the live map.',
+        [
+          { text: 'Go to Live Map', onPress: () => router.replace('/(tabs)/live') },
+          { text: 'Cancel', style: 'cancel' }
+        ]
+      );
+    } else {
+      boardBus(id, displayDestination, displayFrom);
+      router.push(`/bus/journey/${id}?destination=${displayDestination}&from=${displayFrom}`);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -160,11 +180,9 @@ export default function BusDetailScreen() {
 
         {/* Board Button */}
         <View style={[styles.bottomAction, { paddingBottom: insets.bottom || 20 }]}>
-          <Link href={`/bus/journey/${id}?destination=${displayDestination}&from=${from || 'Bandra Station (W)'}`} asChild>
-            <Pressable style={styles.boardButton}>
-              <Text style={styles.boardButtonText}>Board Bus {id}</Text>
-            </Pressable>
-          </Link>
+          <Pressable style={styles.boardButton} onPress={handleBoardBus}>
+            <Text style={styles.boardButtonText}>Board Bus {id}</Text>
+          </Pressable>
         </View>
       </View>
     </View>
@@ -181,7 +199,7 @@ const styles = StyleSheet.create({
     height: height * 0.45,
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
   },
   headerContainer: {
     position: 'absolute',
