@@ -1,56 +1,106 @@
-# Welcome to your Expo app 👋
+# Raah Commuter App 🚌
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Raah Commuter is a modern, beautifully designed React Native application built with Expo to revolutionize the daily public transit experience. It provides commuters with real-time bus tracking, contextual route alerts, saved journeys, and gamified travel statistics.
 
-## Get started
+## ✨ Features
 
-1. Install dependencies
+- **Smart Search & Routing (Home)**: Quickly search for buses or destinations, view detailed route steps, and board buses seamlessly.
+- **Real-Time Live Tracking (Live)**: Context-aware live tracking! Once you board a bus, the live tab automatically tracks your active journey, providing an interactive timeline, delay status, and one-tap journey completion.
+- **Dynamic Alerts (Alerts)**: Stay informed with a global alerts system covering route diversions, weather updates, and delays. Features a global unread badge counter in the navbar that dynamically updates as you read notifications.
+- **Saved & History (Saved)**: Quick access to your favorite places (Home, Work, College) and a complete history of your recent trips generated automatically upon completing a live journey.
+- **Gamified Profile (Profile)**: Track your environmental impact with CO₂ saved, money saved, and unlock custom achievements based on your travel habits.
 
+---
+
+## 🗺 User Workflow
+
+1. **Discovery**: The user opens the **Home** tab and searches for a destination.
+2. **Action**: The user selects a bus (e.g., Bus 507) and taps **"Board Bus"**.
+3. **Tracking**: The app contextually switches to the **Live** tab, revealing a draggable bottom sheet with the full route timeline and current location.
+4. **Completion**: Upon reaching the destination, the user taps **"Mark Journey Completed"**.
+5. **Logging**: The trip is automatically archived in the **Saved** tab under "Recent Trips".
+6. **Engagement**: The user checks their **Profile** to see their updated trip count and environmental impact.
+
+---
+
+## 🏗 Architecture & State Management
+
+The application is built on **Expo Router** for file-based routing and uses **React Context API** for lightweight, predictable global state management.
+
+```mermaid
+graph TD
+  A[App Entry] --> B((Expo Router))
+  B --> C[Root Layout: _layout.tsx]
+  C --> D[Providers: AlertsProvider & JourneyProvider]
+  
+  D --> E{Tab Navigation}
+  
+  E --> F[Home Tab]
+  E --> G[Live Tab]
+  E --> H[Alerts Tab]
+  E --> I[Saved Tab]
+  E --> J[Profile Tab]
+
+  %% State Connections
+  F -.->|Board Bus Action| K[(JourneyContext)]
+  G -.->|Read Active Journey & Complete| K
+  I -.->|Read Recent Trips & Add Places| K
+
+  H -.->|Read Alerts & Mark Read| L[(AlertsContext)]
+  D -.->|Provide Unread Badge Count to Layout| L
+```
+
+### Key Contexts
+- **`JourneyContext`**: Manages the currently boarded bus (`activeJourney`), user's saved locations (`savedPlaces`), and historical trips (`recentTrips`). 
+- **`AlertsContext`**: Manages the array of notifications, read/unread status, and dynamically powers the notification badge in the bottom tab bar.
+
+---
+
+## 🚀 Getting Started
+
+Follow these instructions to replicate and run this project on your local device.
+
+### Prerequisites
+- Node.js (v18 or newer recommended)
+- npm, yarn, or pnpm
+- [Expo Go](https://expo.dev/client) app installed on your physical iOS/Android device (or a simulator installed on your computer).
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Prince-Vaviya/raah-u.git
+   cd raah-commuter
+   ```
+
+2. **Install Dependencies**
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. **Start the Development Server**
    ```bash
-   npx expo start
+   npm run start
    ```
 
-In the output, you'll find options to open the app in a
+### Running on your Device
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Once the Metro Bundler starts, it will display a large QR code in your terminal.
+- **iOS**: Open your default Camera app and scan the QR code. Tap the prompt to open it in **Expo Go**.
+- **Android**: Open the **Expo Go** app and tap "Scan QR Code".
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+*Note: Ensure your phone and your computer are connected to the same Wi-Fi network.*
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## 🛠 Tech Stack
 
-```bash
-npm run reset-project
-```
+- **Framework**: [React Native](https://reactnative.dev/)
+- **Routing**: [Expo Router v3](https://docs.expo.dev/router/introduction/)
+- **Icons**: `@expo/vector-icons` (Ionicons)
+- **Styling**: React Native StyleSheet (Vanilla)
+- **State**: React Context API
+- **Maps**: `react-native-maps`
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-### Other setup steps
-
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 🤝 Contributing
+Feel free to open issues or submit pull requests. Ensure all new UI components are placed in `src/components/ui/` and global states are properly segregated in `src/context/`.
